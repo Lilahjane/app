@@ -9,17 +9,38 @@ import { Recipe } from '../recipe';
 
 @Component({
   selector: 'app-cards',
-  imports: [MatButtonModule, MatCardModule],
+  imports: [
+    MatButtonModule,
+    MatCardModule, 
+    FilterComponent
+  ],
   templateUrl: './cards.component.html',
   styleUrl: './cards.component.scss'
 })
 export class CardsComponent {
-recipecards: Recipe[] = [];
+  recipes: Recipe[] = [];
+  minCalories?: number;
+  maxCalories?: number;
+
   constructor(private recipeService: RecipeSService) { }
 
   ngOnInit() {
-    this.recipeService.getRecipes().subscribe(recipes => {
-      this.recipecards = recipes;
+    this.fetchRecipes();
+  }
+
+  updateMin(min: number) {
+    this.minCalories = min;
+    this.fetchRecipes();
+  }
+
+  updateMax(max: number) {
+    this.maxCalories = max;
+    this.fetchRecipes();
+  }
+
+  fetchRecipes() {
+    this.recipeService.getRecipesByCalories(this.minCalories, this.maxCalories).subscribe(recipes => {
+      this.recipes = recipes;
     });
   }
 }

@@ -27,5 +27,23 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './filter.component.scss'
 })
 export class FilterComponent {
+  @Output() minChanged = new EventEmitter<number>();
+  @Output() maxChanged = new EventEmitter<number>();
 
+  minCal: number = 0;
+  maxCal: number = 1000;
+
+  updateMin(event: Event) {
+    this.minCal = (event.target as HTMLInputElement).valueAsNumber;
+    this.minChanged.emit(this.minCal);
+  }
+
+  updateMax(event: Event) {
+    this.maxCal = (event.target as HTMLInputElement).valueAsNumber;
+    this.maxChanged.emit(this.maxCal);
+  }
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
 }
